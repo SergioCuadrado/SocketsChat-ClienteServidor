@@ -43,7 +43,7 @@ const listen = (port) => {
       let err = false;
       // Mirando si existe el usuario.
       for (let users of connections.values()) {
-        if (users === message) {
+        if (users.toLowerCase() === message.toLowerCase()) {
           err = true;
           socket.write(`${ERR}: you can't right now.`);
         }
