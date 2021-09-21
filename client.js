@@ -8,6 +8,7 @@ const readline = require('readline').createInterface({
 });
 
 const END = 'END';
+const ERR = "ERR: you can't right now.";
 
 const error = (message) => {
   console.error(message);
@@ -42,6 +43,9 @@ const connect = (host, port) => {
     });
 
     socket.on('data', (data) => {
+      if (data === ERR) {
+        socket.end();
+      }
       // Estamos trayendo la informacion que nos ha enviado el servidor que en este caso es lo que hemos escrito a nosotros mismos.
       console.log(data);
     });

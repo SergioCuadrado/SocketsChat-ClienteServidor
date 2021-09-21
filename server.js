@@ -5,6 +5,7 @@ const { Server } = require('net');
 // Protocolo que indique que se ha acabado la conexion.
 const host = '0.0.0.0';
 const END = 'END';
+const ERR = 'ERR';
 
 // Mapa de conexiones, almacenar todas las conexiones que se va a mapear 1 socket a 1 usuario
 // 127.0.0.1:8000 => 'Sergio'
@@ -39,7 +40,17 @@ const listen = (port) => {
     socket.setEncoding('utf-8');
 
     socket.on('data', (message) => {
-      if (!connections.has(socket)) {
+      let err = false;
+      // Mirando si existe el usuario.
+      for (let users of connections.values()) {
+        if (users === message) {
+          err = true;
+          socket.write(`${ERR}: you can't right now.`);
+        }
+      }
+      if (err) {
+        console.log(`${ERR}: you can't right now.`);
+      } else if (!connections.has(socket)) {
         // Colocando como nombre de usuario el primer mensaje que escriba.
         console.log(`Username ${message} set for connection ${remoteSocket}`);
         // Almacenando el socket en el map para saber que usuarios estan conectados.
